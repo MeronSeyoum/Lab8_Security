@@ -30,10 +30,11 @@ public class AdminFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-// create session
+       // create session
         HttpSession session = httpRequest.getSession();
-//retrive role id from session which was saved during login
+      //retrive role id from session which was saved during login
         Integer role_id = (Integer) session.getAttribute("role_id");
+        // if value of role id is not null or different from one then it is not admin redict to note page 
         if (role_id == null || role_id != 1) {
             httpResponse.sendRedirect("notes");
         } else {
