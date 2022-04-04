@@ -11,27 +11,46 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 /**
  *
  * @author Meron Seyoum
  */
-@WebFilter(filterName = "AdminFilter", servletNames = {"AdminServlet"})
 public class AdminFilter implements Filter {
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-}
-     /**
+
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+// create session
+        HttpSession session = httpRequest.getSession();
+//retrive role id from session which was saved during login
+        Integer role_id = (Integer) session.getAttribute("role_id");
+        if (role_id == null || role_id != 1) {
+            httpResponse.sendRedirect("notes");
+        } else {
+            chain.doFilter(request, response);
+
+        }
+    }
+
+    /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {          
-    }   
+    public void init(FilterConfig filterConfig) {
+    }
 }
